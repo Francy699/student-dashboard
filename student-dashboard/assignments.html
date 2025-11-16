@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Assignments — Student Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <script src="https://kit.fontawesome.com/a2d9b7a6a0.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <img src="assets/images/avatar.png" alt="logo" class="logo-small">
+        <h3>StudentBoard</h3>
+      </div>
+      <nav class="nav">
+        <a href="dashboard.html" class="nav-item"><i class="fa fa-home"></i> Dashboard</a>
+        <a href="attendance.html" class="nav-item"><i class="fa fa-calendar-check"></i> Attendance</a>
+        <a href="grades.html" class="nav-item"><i class="fa fa-graduation-cap"></i> Grades</a>
+        <a href="assignments.html" class="nav-item active"><i class="fa fa-book"></i> Assignments</a>
+        <a href="profile.html" class="nav-item"><i class="fa fa-user"></i> Profile</a>
+      </nav>
+      <div class="sidebar-footer">
+        <button id="logoutBtn4" class="btn ghost small"><i class="fa fa-sign-out-alt"></i> Logout</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <h2>Assignments</h2>
+      </header>
+
+      <section class="content">
+        <div class="card">
+          <h3>Your Assignments</h3>
+          <input id="searchAssign" placeholder="Search assignments..." class="input">
+          <ul id="assignList" class="list"></ul>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const data = window.__STUDENT_DATA__;
+      const list = document.getElementById('assignList');
+      function render(filter=''){
+        list.innerHTML = '';
+        const filtered = data.assignments.filter(a => a.title.toLowerCase().includes(filter.toLowerCase()));
+        filtered.forEach(a => {
+          const li = document.createElement('li');
+          li.className = 'assign-item';
+          li.innerHTML = `
+            <div>
+              <strong>${a.title}</strong>
+              <div class="muted small">Due: ${a.due} • ${a.subject}</div>
+            </div>
+            <div class="assign-actions">
+              <button class="btn ghost small status">${a.completed ? 'Completed' : 'Mark Done'}</button>
+            </div>
+          `;
+          const btn = li.querySelector('.status');
+          btn.addEventListener('click', () => {
+            a.completed = !a.completed;
+            btn.textContent = a.completed ? 'Completed' : 'Mark Done';
+            btn.classList.toggle('done', a.completed);
+            localStorage.setItem('student_data', JSON.stringify(window.__STUDENT_DATA__));
+          });
+          if (a.completed) btn.classList.add('done');
+          list.appendChild(li);
+        });
+      }
+      render();
+      document.getElementById('searchAssign').addEventListener('input', (e)=>render(e.target.value));
+    });
+  </script>
+  <script src="js/main.js"></script>
+</body>
+</html>

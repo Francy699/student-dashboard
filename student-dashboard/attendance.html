@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Attendance — Student Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <script src="https://kit.fontawesome.com/a2d9b7a6a0.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <img src="assets/images/avatar.png" alt="logo" class="logo-small">
+        <h3>StudentBoard</h3>
+      </div>
+      <nav class="nav">
+        <a href="dashboard.html" class="nav-item"><i class="fa fa-home"></i> Dashboard</a>
+        <a href="attendance.html" class="nav-item active"><i class="fa fa-calendar-check"></i> Attendance</a>
+        <a href="grades.html" class="nav-item"><i class="fa fa-graduation-cap"></i> Grades</a>
+        <a href="assignments.html" class="nav-item"><i class="fa fa-book"></i> Assignments</a>
+        <a href="profile.html" class="nav-item"><i class="fa fa-user"></i> Profile</a>
+      </nav>
+      <div class="sidebar-footer">
+        <button id="logoutBtn2" class="btn ghost small"><i class="fa fa-sign-out-alt"></i> Logout</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <h2>Attendance</h2>
+      </header>
+
+      <section class="content">
+        <div class="card">
+          <h3>Subject-wise Attendance</h3>
+          <table class="table" id="attendanceTable">
+            <thead>
+              <tr>
+                <th>Subject</th>
+                <th>Present</th>
+                <th>Absent</th>
+                <th>Attendance %</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <div class="card mt-20">
+          <h3>Attendance Overview</h3>
+          <canvas id="attendanceChart" height="140"></canvas>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script>
+    // Render attendance page using inline script to keep separation
+    document.addEventListener('DOMContentLoaded', () => {
+      const data = window.__STUDENT_DATA__;
+      const tbody = document.querySelector('#attendanceTable tbody');
+      data.attendance.forEach((sub) => {
+        const pct = Math.round((sub.present / (sub.present + sub.absent)) * 100);
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${sub.subject}</td>
+          <td>${sub.present}</td>
+          <td>${sub.absent}</td>
+          <td><span class="badge ${pct >= 75 ? 'green' : pct >=50 ? 'yellow' : 'red'}">${pct}%</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // Chart
+      const ctx = document.getElementById('attendanceChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: data.attendance.map(s => s.subject),
+          datasets: [{
+            data: data.attendance.map(s => Math.round((s.present/(s.present+s.absent))*100)),
+          }]
+        }
+      });
+    });
+  </script>
+  <script src="js/main.js"></script>
+</body>
+</html>

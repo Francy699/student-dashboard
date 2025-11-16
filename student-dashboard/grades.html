@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Grades — Student Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <script src="https://kit.fontawesome.com/a2d9b7a6a0.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <img src="assets/images/avatar.png" alt="logo" class="logo-small">
+        <h3>StudentBoard</h3>
+      </div>
+      <nav class="nav">
+        <a href="dashboard.html" class="nav-item"><i class="fa fa-home"></i> Dashboard</a>
+        <a href="attendance.html" class="nav-item"><i class="fa fa-calendar-check"></i> Attendance</a>
+        <a href="grades.html" class="nav-item active"><i class="fa fa-graduation-cap"></i> Grades</a>
+        <a href="assignments.html" class="nav-item"><i class="fa fa-book"></i> Assignments</a>
+        <a href="profile.html" class="nav-item"><i class="fa fa-user"></i> Profile</a>
+      </nav>
+      <div class="sidebar-footer">
+        <button id="logoutBtn3" class="btn ghost small"><i class="fa fa-sign-out-alt"></i> Logout</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <h2>Grades</h2>
+      </header>
+
+      <section class="content">
+        <div class="card">
+          <h3>Subject Grades</h3>
+          <table class="table" id="gradesTable">
+            <thead>
+              <tr>
+                <th>Subject</th>
+                <th>Marks</th>
+                <th>Grade</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+              <tr>
+                <td><strong>Average</strong></td>
+                <td id="avgMarks">--</td>
+                <td id="avgGrade">--</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const data = window.__STUDENT_DATA__;
+      const tbody = document.querySelector('#gradesTable tbody');
+      let sum = 0;
+      data.grades.forEach(g => {
+        sum += g.marks;
+        const grade = g.marks >= 90 ? 'A+' : g.marks >= 80 ? 'A' : g.marks >= 70 ? 'B' : g.marks >= 60 ? 'C' : 'D';
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${g.subject}</td>
+          <td>${g.marks}</td>
+          <td><span class="badge ${g.marks >= 80 ? 'green' : g.marks >= 60 ? 'yellow' : 'red'}">${grade}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+      const avg = Math.round(sum / data.grades.length);
+      document.getElementById('avgMarks').textContent = avg;
+      const avgGrade = avg >= 90 ? 'A+' : avg >= 80 ? 'A' : avg >= 70 ? 'B' : avg >= 60 ? 'C' : 'D';
+      document.getElementById('avgGrade').textContent = avgGrade;
+    });
+  </script>
+  <script src="js/main.js"></script>
+</body>
+</html>
