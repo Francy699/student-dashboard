@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Login — Student Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="auth-page">
+  <main class="auth-container">
+    <section class="auth-card">
+      <img src="assets/images/avatar.png" alt="logo" class="logo-small">
+      <h2>Welcome back</h2>
+      <p class="muted">Please sign in to access your dashboard</p>
+
+      <form id="loginForm" class="form-group" novalidate>
+        <label for="username">Username</label>
+        <input id="username" name="username" type="text" placeholder="e.g., tejasri" required>
+
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" placeholder="Enter password" required>
+
+        <div class="row between">
+          <div>
+            <input id="remember" type="checkbox">
+            <label for="remember" class="muted">Remember me</label>
+          </div>
+          <a href="#" class="muted">Forgot?</a>
+        </div>
+
+        <button type="submit" class="btn primary full">Sign in</button>
+      </form>
+
+      <p class="muted small">Demo: Use any username and password (client-side only).</p>
+    </section>
+  </main>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
